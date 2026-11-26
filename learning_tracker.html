@@ -73,8 +73,8 @@ header{margin-bottom:16px}
 .daily-metric{padding:0 16px;border-right:1px solid #dfe7f1}
 .daily-metric:last-child{border:0}
 .daily-metric>span{display:block;color:#5f7087;font-size:13px}
-.daily-metric strong{display:block;font-size:25px;line-height:1.5;font-weight:650;color:#243a59;font-variant-numeric:tabular-nums}
-.daily-metric strong small{font-size:12px;font-weight:400;color:#64748b;margin-left:4px}
+.daily-metric strong{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:4px;font-size:25px;line-height:1.5;font-weight:650;color:#243a59;font-variant-numeric:tabular-nums}
+.daily-metric strong small{font-size:12px;font-weight:400;color:#64748b}
 .daily-metric.learned strong{color:#147350}
 .daily-metric.remaining strong{color:#2459a8}
 .daily-progress{margin:12px 0 18px}
@@ -154,7 +154,8 @@ header{margin-bottom:16px}
   .daily-metric{padding:0 10px}
   .daily-metric>span{font-size:12px}
   .daily-metric strong{font-size:23px;line-height:1.45;white-space:nowrap}
-  .daily-metric strong small{font-size:11px;margin-left:3px}
+  .daily-metric strong{column-gap:3px}
+  .daily-metric strong small{font-size:11px}
   .daily-progress{margin:10px 0 14px}
   #dailyProgressText{font-size:12px}
   #dailySection .task{grid-template-columns:minmax(0,1fr) 92px;grid-template-areas:'info minute' 'time minute' 'actions actions';gap:5px 12px;padding:14px;margin-bottom:12px}
@@ -201,7 +202,7 @@ header{margin-bottom:16px}
   <div class="daily-progress"><span id="dailyProgressText"></span><div id="dailyProgress" class="daily-progress-track" role="progressbar" aria-label="计划任务完成进度" aria-valuemin="0" aria-valuemax="100"><span id="dailyProgressFill"></span></div></div>
   <div id="tasks"></div>
   <div class="daily-help"><details><summary>阶段安排与打卡说明</summary><p class="focus" id="focus"></p><p class="sectionnote">按实际学习分钟打卡；跳过会扣除这项计划时长，不计入已学。完成或跳过后都可以撤销，未处理的任务会保留待办。</p><p class="sectionnote">工作日另留1小时工作间隙，具体学什么自行安排，忙时可直接跳过。这段时间单独统计，不分摊到两科。</p></details></div>
-  <div class="daily-tools"><div class="tool-group batch-group"><details><summary>批量操作 <span>完成、跳过与清除</span></summary><div class="toolbar batch-actions"><button id="all" class="batch-complete">完成全部待办</button><button id="skipAll" class="batch-skip">跳过全部待办</button><button id="clear" class="batch-clear">清除当天记录</button></div></details></div><div class="tool-group"><div class="tool-heading">额外学习</div><div class="toolbar extra-actions"><div class="extra-picker" id="extraPicker"><select id="extraType" hidden aria-hidden="true" tabindex="-1"><optgroup label="hc"><option value="行测刷题">hc · 刷题</option><option value="行测视频">hc · 视频学习</option><option value="行测真题">hc · 真题</option><option value="行测复盘">hc · 复盘</option></optgroup><optgroup label="专业知识"><option value="专技岗学习">专业知识</option><option value="专技岗真题">专业知识 · 刷真题</option><option value="专技岗复盘">专业知识 · 错题复盘</option></optgroup><optgroup label="综合真题"><option value="综合真题（限时）">综合真题（限时）</option></optgroup></select><button type="button" id="extraChoice" class="extra-choice kind-hc" aria-expanded="false" aria-controls="extraMenu"><span class="choice-dot"></span><span id="extraChoiceLabel">hc · 刷题</span><span class="choice-chevron" aria-hidden="true">⌄</span></button><div id="extraMenu" class="extra-menu" hidden></div></div><div class="minutes-field"><input id="extraMin" type="number" min="1" max="1440" value="60" aria-label="额外学习分钟数"><span>分钟</span></div><button id="extraAdd" class="extra-add">＋ 添加额外学习</button></div></div></div>
+  <div class="daily-tools"><div class="tool-group batch-group"><details><summary>批量操作 <span>完成、跳过与清除</span></summary><div class="toolbar batch-actions"><button id="all" class="batch-complete">完成全部待办</button><button id="skipAll" class="batch-skip">跳过全部待办</button><button id="clear" class="batch-clear">清除当天记录</button></div></details></div><div class="tool-group"><div class="tool-heading">额外学习</div><div class="toolbar extra-actions"><div class="extra-picker" id="extraPicker"><select id="extraType" hidden aria-hidden="true" tabindex="-1"><optgroup label="hc"><option value="行测刷题">hc · 刷题</option><option value="行测视频">hc · 视频学习</option><option value="行测真题">hc · 真题</option><option value="行测复盘">hc · 复盘</option></optgroup><optgroup label="专业知识"><option value="专技岗学习">专业知识</option><option value="专技岗真题">专业知识 · 刷真题</option><option value="专技岗复盘">专业知识 · 错题复盘</option></optgroup><optgroup label="综合真题"><option value="综合真题（限时）">综合真题（限时）</option></optgroup></select><button type="button" id="extraChoice" class="extra-choice kind-hc" aria-expanded="false" aria-controls="extraMenu"><span class="choice-dot"></span><span id="extraChoiceLabel">hc · 刷题</span><span class="choice-chevron" aria-hidden="true">⌄</span></button><div id="extraMenu" class="extra-menu" hidden></div></div><div class="minutes-field"><input id="extraMin" type="number" min="1" max="1440" value="60" aria-label="额外学习时长（min）"><span>min</span></div><button id="extraAdd" class="extra-add">＋ 添加额外学习</button></div></div></div>
   <div class="note-card"><label for="note" class="note-label">今日笔记 <span>学习进度 · 错题 · 下次继续</span></label><textarea id="note" placeholder="今天学到哪里？有哪些需要复习的内容？"></textarea></div><small id="notice" role="status"></small></section>
 
 <div class="stats"><div class="stat">距离目标<strong id="count"></strong></div><div class="stat">所选周已学<strong id="week"></strong><small id="weekRange"></small></div><div class="stat">所选月已学<strong id="month"></strong><small id="monthRange"></small></div><div class="stat">累计已学<strong id="total"></strong><small id="days"></small></div></div>
@@ -232,6 +233,7 @@ function aggregate(ds){
   a.forecast=a.actual+a.pending;return a;
 }
 function el(tag,cls,txt){let e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}function button(txt,cls,fn){let b=el('button',cls,txt);b.type='button';b.onclick=fn;return b}function setTask(t,st,min){let r=rec(selected);if(st==='pending'){delete r.tasks[t.id]}else r.tasks[t.id]={status:st,name:t.name,min:st==='skipped'?t.min:min};save();render()}
+function plannedHours(min){return(min/60).toFixed(1)}
 function renderTasks(){
   let r=rec(selected),p=plan(selected);
   $('phase').textContent=stage(selected)+'阶段';$('prev').disabled=selected===START;$('next').disabled=selected===END;
@@ -240,10 +242,10 @@ function renderTasks(){
   for(let t of p){
     let v=r.tasks[t.id],st=v?.status||'pending',row=el('div','task '+st),num=el('input');
     row.dataset.taskId=t.id;num.id='task-min-'+t.id;num.type='number';num.min=1;num.max=1440;num.step=1;num.inputMode='numeric';
-    num.value=st==='done'?v.min:t.min;num.setAttribute('aria-label',t.time+' 实际学习分钟');num.disabled=st==='skipped';
+    num.value=st==='done'?v.min:t.min;num.setAttribute('aria-label',t.time+' 实际学习时长（min）');num.disabled=st==='skipped';
     let label=el('div','task-info');
-    label.append(el('span','tag '+category(t.name),display(st==='done'?v.name||t.name:t.name)),el('div','status',st==='done'?'已完成 · 计划'+t.min+'分钟':st==='skipped'?'已跳过 · 计划'+t.min+'分钟':'待完成 · 计划'+t.min+'分钟'));
-    let minute=el('div','minute'),caption=el('label','','实际时长'),control=el('div','minute-control');caption.htmlFor=num.id;control.append(num,el('small','','分'));minute.append(caption,control);
+    label.append(el('span','tag '+category(t.name),display(st==='done'?v.name||t.name:t.name)),el('div','status',(st==='done'?'已完成':st==='skipped'?'已跳过':'待完成')+' · 计划'+plannedHours(t.min)+'h'));
+    let minute=el('div','minute'),caption=el('label','','实际时长'),control=el('div','minute-control');caption.htmlFor=num.id;control.append(num,el('small','','min'));minute.append(caption,control);
     let actions=el('div','actions');
     let read=()=>{let n=Number(num.value);return Number.isInteger(n)&&n>=1&&n<=1440&&num.value!==''?n:null};
     if(st==='pending'){
@@ -257,7 +259,7 @@ function renderTasks(){
   for(let[i,t]of r.extra.entries()){
     let row=el('div','task extra'),label=el('div','task-info'),actions=el('div','actions');label.append(el('span','tag '+category(t.name),display(t.name)));
     actions.append(button('删除','',()=>{r.extra.splice(i,1);save();render()}));
-    row.append(el('span','time','额外学习'),label,el('span','extra-duration',t.min+'分钟'),actions);root.append(row);
+    row.append(el('span','time','额外学习'),label,el('span','extra-duration',t.min+'min'),actions);root.append(row);
   }
   if(parse(selected).getDay()===5||!p.some(t=>t.id==='pm'))root.append(el('p','rest-note',selected===END?'下午和晚上休息，不计入计划时长。':'今晚休息，不计入计划时长。'));
   $('all').disabled=!p.some(t=>status(selected,t)==='pending');$('skipAll').disabled=$('all').disabled;
@@ -265,8 +267,8 @@ function renderTasks(){
 function renderDailySummary(d){
   $('dailyWeekday').textContent='周'+'日一二三四五六'[parse(selected).getDay()];
   let root=$('daily');root.replaceChildren();
-  for(let[label,n,cls]of [['计划',d.planned,''],['已学',d.actual,'learned'],['待完成',d.pending,'remaining'],['跳过',d.skipped,'']]){
-    let item=el('div','daily-metric '+cls),value=el('strong','',String(n));value.append(el('small','','分'));item.append(el('span','',label),value);root.append(item);
+  for(let[label,n,cls,unit]of [['计划',plannedHours(d.planned),'','h'],['已学',d.actual,'learned','min'],['待完成',d.pending,'remaining','min'],['跳过',d.skipped,'','min']]){
+    let item=el('div','daily-metric '+cls),value=el('strong','',String(n));value.append(el('small','',unit));item.append(el('span','',label),value);root.append(item);
   }
   let p=plan(selected),done=p.filter(t=>status(selected,t)==='done').length,skipped=p.filter(t=>status(selected,t)==='skipped').length,pct=p.length?Math.round(done/p.length*100):0;
   $('dailyProgressText').textContent='计划任务完成'+done+'/'+p.length+'项'+(skipped?' · 跳过'+skipped+'项':'');
