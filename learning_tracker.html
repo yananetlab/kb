@@ -50,32 +50,246 @@ main > section > details > :last-child:not(summary){margin-bottom:16px}
 .calendar-legend i{width:10px;height:10px;border:1px solid #d8e1eb;border-radius:3px;background:var(--swatch)}
 @media(max-width:650px){main > section > :is(details,details.collapsible) > summary{padding:11px 12px;min-height:45px;font-size:14px;gap:7px}main > section > :is(details,details.collapsible) > summary small{font-size:11px}#overview>summary small{flex-basis:100%;margin-left:17px}main > section > details > :not(summary){margin-left:12px;margin-right:12px}.calendarWrap{padding:0 8px}.calendar{padding:5px;gap:3px}.calendar .day{height:40px;min-height:40px;padding:3px 4px}.calendar .day span{font-size:12px}.calendar .day small{font-size:10px}.calendar-legend{justify-content:flex-start;gap:5px 8px}}
 
+
+/* Daily check-in: tasks first, with room for a thumb-sized action. */
+body{font-size:16px}
+header{margin-bottom:16px}
+#dailySection{padding:22px;border-radius:18px;border-color:#d6e2f0;box-shadow:0 5px 24px #18355b06;overflow:visible}
+.daily-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.daily-heading>div{display:flex;align-items:baseline;gap:12px;min-width:0}
+.daily-heading h2{font-size:22px;line-height:1.4;margin:0;letter-spacing:.02em}
+.daily-weekday{font-size:14px;color:#64748b}
+#phase{font-size:13px;padding:5px 10px;white-space:nowrap;border-radius:7px}
+.date-controls{position:relative;display:grid;grid-template-columns:64px minmax(130px,200px) 64px 56px;gap:8px;margin-bottom:16px}
+.date-controls>button,.date-controls .datebtn{min-height:44px;border-radius:10px;font-size:14px;padding:8px 6px}
+.date-controls .datepick{position:static;min-width:0}
+.date-controls .datebtn{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;width:100%;font-weight:600;box-shadow:none;font-variant-numeric:tabular-nums}
+.date-controls .datebtn:after{content:'';float:none;display:inline-block;flex:none;width:12px;height:12px;border:1.5px solid currentColor;border-radius:3px;background:linear-gradient(currentColor,currentColor) 0 3px/100% 1.5px no-repeat;opacity:.65}
+.date-controls #today{background:#edf4ff;border-color:#d8e5f8;color:#2459a8}
+.date-controls .datepanel{left:0;right:auto;width:min(100%,320px);max-width:100%;padding:12px}
+.datepanel-head button,.datepanel-foot button{min-width:44px;min-height:44px}
+.datepanel .picker-day{min-width:0;height:38px;font-size:14px}
+.daily-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0;background:#f2f6fb;border:1px solid #e8eef6;border-radius:12px;padding:12px 0}
+.daily-metric{padding:0 16px;border-right:1px solid #dfe7f1}
+.daily-metric:last-child{border:0}
+.daily-metric>span{display:block;color:#5f7087;font-size:13px}
+.daily-metric strong{display:block;font-size:25px;line-height:1.5;font-weight:650;color:#243a59;font-variant-numeric:tabular-nums}
+.daily-metric strong small{font-size:12px;font-weight:400;color:#64748b;margin-left:4px}
+.daily-metric.learned strong{color:#147350}
+.daily-metric.remaining strong{color:#2459a8}
+.daily-progress{margin:12px 0 18px}
+#dailyProgressText{display:block;font-size:13px;color:#64748b;margin-bottom:6px}
+.daily-progress-track{height:5px;border-radius:5px;background:#e7edf5;overflow:hidden}
+#dailyProgressFill{display:block;height:100%;width:0;background:#3687be;border-radius:5px;transition:width .18s}
+#dailySection .task{display:grid;grid-template-columns:135px minmax(0,1fr) 108px 230px;grid-template-areas:'time info minute actions';gap:16px;padding:16px;margin:0 0 12px;border:1px solid #e0e8f2;border-radius:14px;background:#fff;align-items:center;font-size:16px}
+#dailySection .task .time{grid-area:time;font-size:14px;color:#5f7087;white-space:nowrap}
+#dailySection .task-info{grid-area:info;min-width:0}
+#dailySection .task .tag{font-size:15px;line-height:1.5;padding:4px 9px;border-radius:6px;max-width:100%}
+.tag.f{background:#e5f1f3;color:#286872}
+#dailySection .task .status{font-size:13px;line-height:1.5;margin-top:5px}
+#dailySection .task .minute{grid-area:minute;display:block;min-width:0}
+.minute>label{display:block;font-size:12px;color:#64748b;margin-bottom:5px}
+.minute-control{display:flex;align-items:center;gap:6px}
+#dailySection .minute-control input{min-width:0;width:100%;height:44px;font-size:20px;font-weight:550;padding:4px 8px;border-radius:9px;border-color:#cbd8e8;background:#fcfdff;font-variant-numeric:tabular-nums}
+#dailySection .minute-control small{font-size:13px;flex:none}
+#dailySection .task .actions{grid-area:actions;display:grid;grid-template-columns:1.25fr 1fr;gap:10px;width:100%}
+#dailySection .task .actions button{min-height:48px;padding:10px 12px;font-size:16px;line-height:1.4;border-radius:10px;font-weight:600;white-space:nowrap}
+#dailySection .task .actions .skipbtn{background:#fffbf5;border-color:#ead7b9;color:#91602e;font-weight:500}
+#dailySection .task .actions .skipbtn:hover{background:#fff0db}
+#dailySection .task.done{background:#f3faf6;border-color:#cfe6d9}
+#dailySection .task.skipped{background:#faf8f4;border-color:#e9dfd0}
+#dailySection .task.skipped .tag,#dailySection .task.skipped .time{text-decoration:none;opacity:.8}
+#dailySection .task.done .actions,#dailySection .task.skipped .actions{grid-template-columns:1fr}
+#dailySection .task .undo{background:#fff;border-color:#ccd9d5;color:#45645a;font-weight:500}
+#dailySection .task.skipped .undo{color:#82653d;border-color:#e0d5c2}
+#dailySection .task input:focus-visible{outline:2px solid #9bbfe9;outline-offset:2px}
+#dailySection :is(button,summary):focus-visible{outline:2px solid #4d85ca;outline-offset:3px}
+#dailySection .task.extra{background:#f7f9fc;border-style:dashed}
+#dailySection .task.extra .extra-duration{grid-area:minute;font-size:16px;color:#52677f}
+#dailySection .task.extra .actions{display:flex;justify-content:flex-end}
+#dailySection .task.extra .actions button{min-width:90px;min-height:44px;background:#fff;color:#64748b;font-size:14px;font-weight:400}
+.rest-note{padding:10px 12px;margin:0 0 14px;border-radius:9px;font-size:13px;color:#66778e;background:#f3f6fb}
+.daily-help{margin:4px 0 12px}
+.daily-help summary,.batch-group summary{font-size:14px;font-weight:550;color:#53677f;min-height:44px;gap:10px;line-height:1.5}
+.daily-help summary:before,.batch-group summary:before{content:'';display:block;width:7px;height:7px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(-45deg);margin:0 3px}
+.daily-help details[open]>summary:before,.batch-group details[open]>summary:before{content:'';transform:rotate(45deg)}
+.daily-help .focus{font-size:14px;margin:6px 0 10px}
+.daily-help .sectionnote{font-size:13px;line-height:1.8;margin-bottom:10px}
+.daily-tools{margin:0 0 14px;gap:12px}
+.batch-group{padding:0 14px}
+.batch-group summary>span{margin-left:auto;font-size:12px;font-weight:400;color:#7a899c}
+.batch-group .batch-actions{padding:4px 0 14px}
+.daily-tools .tool-heading{font-size:14px;color:#53677f}
+.daily-tools button{min-height:44px;font-size:14px}
+.extra-actions{display:grid;grid-template-columns:minmax(0,1fr) 115px auto}
+.extra-picker{min-width:0}
+.minutes-field input{height:44px;width:76px;font-size:18px}
+.extra-menu{max-width:100%}
+.daily-tools .extra-menu .extra-option{min-height:40px}
+.note-label{font-size:15px}
+.note-label span{font-size:12px}
+.note-card textarea{font-size:16px;min-height:100px}
+#notice{display:block;min-height:20px;font-size:12px}
+@media(max-width:900px){
+  #dailySection .task{grid-template-columns:115px minmax(0,1fr) 100px;grid-template-areas:'time info minute' 'actions actions actions';gap:10px 16px}
+  #dailySection .task .actions{margin-top:3px}
+}
+@media(max-width:650px){
+  main{padding:12px 10px}
+  header{padding:16px 18px;border-radius:14px;margin-bottom:14px}
+  header h1{font-size:22px;line-height:1.45}
+  header p{font-size:14px;margin:4px 0}
+  header small{display:block;font-size:12px;line-height:1.5}
+  #dailySection{padding:14px 12px;border-radius:15px;margin-bottom:14px}
+  .daily-heading{margin-bottom:12px;gap:8px}
+  .daily-heading>div{gap:9px}
+  .daily-heading h2{font-size:21px}
+  .daily-weekday{font-size:13px}
+  #phase{font-size:12px;padding:4px 8px}
+  .date-controls{grid-template-columns:48px minmax(0,1fr) 48px 44px;gap:6px;margin-bottom:12px}
+  .date-controls>button,.date-controls .datebtn{font-size:13px;padding:8px 3px;border-radius:9px}
+  .date-controls .datebtn{gap:6px;font-size:14px}
+  .date-controls .datebtn:after{width:11px;height:11px}
+  .daily-summary{padding:10px 0;border-radius:10px}
+  .daily-metric{padding:0 10px}
+  .daily-metric>span{font-size:12px}
+  .daily-metric strong{font-size:23px;line-height:1.45;white-space:nowrap}
+  .daily-metric strong small{font-size:11px;margin-left:3px}
+  .daily-progress{margin:10px 0 14px}
+  #dailyProgressText{font-size:12px}
+  #dailySection .task{grid-template-columns:minmax(0,1fr) 92px;grid-template-areas:'info minute' 'time minute' 'actions actions';gap:5px 12px;padding:14px;margin-bottom:12px}
+  #dailySection .task .tag{font-size:14px;padding:4px 8px}
+  #dailySection .task .status{font-size:12px;margin-top:5px}
+  #dailySection .task .time{font-size:13px;align-self:start}
+  #dailySection .task .minute{align-self:center}
+  .minute>label{font-size:12px}
+  #dailySection .minute-control input{height:44px;font-size:20px}
+  #dailySection .task .actions{margin-top:8px;gap:10px}
+  #dailySection .task .actions button{min-height:50px;font-size:16px;padding:12px 10px}
+  #dailySection .task.extra{grid-template-areas:'info minute' 'time actions';padding:12px 14px}
+  #dailySection .task.extra .actions{margin:0}
+  #dailySection .task.extra .actions button{min-width:76px;min-height:44px;padding:8px}
+  .extra-actions{grid-template-columns:minmax(0,1fr) 102px;gap:10px!important}
+  .extra-add{grid-column:1/-1;width:100%}
+  .extra-choice{font-size:14px!important}
+  .minutes-field{gap:6px}
+  .minutes-field input{width:66px;font-size:18px}
+  .batch-group{padding:0 11px}
+  .batch-group summary>span{font-size:11px}
+  .batch-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .batch-actions button{width:100%;font-size:13px}
+  .batch-actions .batch-clear{grid-column:1/-1}
+  .note-card{padding:12px}
+  .stats{margin:14px 0;gap:10px}
+  .stats .stat{padding:12px;font-size:13px}
+  .stats .stat strong{font-size:24px}
+}
+@media(max-width:350px){
+  .daily-metric{padding:0 7px}
+  .daily-metric strong{font-size:21px}
+  .daily-weekday{font-size:12px}
+  .date-controls .datebtn{font-size:13px}
+  .date-controls .datebtn:after{display:none}
+}
+
 </style></head><body><main>
 <header><h1>个人学习记录</h1><p>2026.11.27 — 2027.04.04</p><small>目标日期：2027年4月5日 · 周五晚固定休息</small></header>
+<section id="dailySection" aria-labelledby="dailyTitle">
+  <div class="daily-heading"><div><h2 id="dailyTitle">每日打卡</h2><span id="dailyWeekday" class="daily-weekday"></span></div><span id="phase" class="tag a"></span></div>
+  <div class="date-controls"><button id="prev" type="button" aria-label="查看前一天">前一天</button><div class="datepick"><button id="dateBtn" class="datebtn" type="button"></button><div id="datePanel" class="datepanel hidden"><div class="datepanel-head"><button id="pickerPrevMonth" type="button">‹</button><strong id="pickerTitle"></strong><button id="pickerNextMonth" type="button">›</button></div><div id="pickerGrid" class="picker-grid"></div><div class="datepanel-foot"><button id="pickerClose" type="button">关闭</button><button id="pickerToday" type="button">今天</button></div></div></div><button id="next" type="button" aria-label="查看后一天">后一天</button><button id="today" type="button">今天</button></div>
+  <div id="daily" class="daily-summary" aria-label="所选日学习时长"></div>
+  <div class="daily-progress"><span id="dailyProgressText"></span><div id="dailyProgress" class="daily-progress-track" role="progressbar" aria-label="计划任务完成进度" aria-valuemin="0" aria-valuemax="100"><span id="dailyProgressFill"></span></div></div>
+  <div id="tasks"></div>
+  <div class="daily-help"><details><summary>阶段安排与打卡说明</summary><p class="focus" id="focus"></p><p class="sectionnote">按实际学习分钟打卡；跳过会扣除这项计划时长，不计入已学。完成或跳过后都可以撤销，未处理的任务会保留待办。</p><p class="sectionnote">工作日另留1小时工作间隙，具体学什么自行安排，忙时可直接跳过。这段时间单独统计，不分摊到两科。</p></details></div>
+  <div class="daily-tools"><div class="tool-group batch-group"><details><summary>批量操作 <span>完成、跳过与清除</span></summary><div class="toolbar batch-actions"><button id="all" class="batch-complete">完成全部待办</button><button id="skipAll" class="batch-skip">跳过全部待办</button><button id="clear" class="batch-clear">清除当天记录</button></div></details></div><div class="tool-group"><div class="tool-heading">额外学习</div><div class="toolbar extra-actions"><div class="extra-picker" id="extraPicker"><select id="extraType" hidden aria-hidden="true" tabindex="-1"><optgroup label="hc"><option value="行测刷题">hc · 刷题</option><option value="行测视频">hc · 视频学习</option><option value="行测真题">hc · 真题</option><option value="行测复盘">hc · 复盘</option></optgroup><optgroup label="专业知识"><option value="专技岗学习">专业知识</option><option value="专技岗真题">专业知识 · 刷真题</option><option value="专技岗复盘">专业知识 · 错题复盘</option></optgroup><optgroup label="综合真题"><option value="综合真题（限时）">综合真题（限时）</option></optgroup></select><button type="button" id="extraChoice" class="extra-choice kind-hc" aria-expanded="false" aria-controls="extraMenu"><span class="choice-dot"></span><span id="extraChoiceLabel">hc · 刷题</span><span class="choice-chevron" aria-hidden="true">⌄</span></button><div id="extraMenu" class="extra-menu" hidden></div></div><div class="minutes-field"><input id="extraMin" type="number" min="1" max="1440" value="60" aria-label="额外学习分钟数"><span>分钟</span></div><button id="extraAdd" class="extra-add">＋ 添加额外学习</button></div></div></div>
+  <div class="note-card"><label for="note" class="note-label">今日笔记 <span>学习进度 · 错题 · 下次继续</span></label><textarea id="note" placeholder="今天学到哪里？有哪些需要复习的内容？"></textarea></div><small id="notice" role="status"></small></section>
+
 <div class="stats"><div class="stat">距离目标<strong id="count"></strong></div><div class="stat">所选周已学<strong id="week"></strong><small id="weekRange"></small></div><div class="stat">所选月已学<strong id="month"></strong><small id="monthRange"></small></div><div class="stat">累计已学<strong id="total"></strong><small id="days"></small></div></div>
 <section><details id="overview"><summary>全周期概览 <small id="overviewShort"></small></summary><div id="overviewContent"></div></details></section>
-<section><div class="toolbar"><h2>每日打卡 <span id="phase" class="tag a"></span></h2><button id="prev">前一天</button><div class="datepick"><button id="dateBtn" class="datebtn" type="button"></button><div id="datePanel" class="datepanel hidden"><div class="datepanel-head"><button id="pickerPrevMonth" type="button">‹</button><strong id="pickerTitle"></strong><button id="pickerNextMonth" type="button">›</button></div><div id="pickerGrid" class="picker-grid"></div><div class="datepanel-foot"><button id="pickerClose" type="button">关闭</button><button id="pickerToday" type="button">今天</button></div></div></div><button id="next">后一天</button><button id="today">今天</button></div><p class="muted" id="daily"></p><p class="focus" id="focus"></p><div id="tasks"></div><p class="sectionnote">完成：按填写的实际分钟计入已学；跳过 ×：扣除该任务的计划时长；撤销：恢复待完成。未处理的过期任务不会自动跳过。</p><div class="daily-tools"><div class="tool-group"><div class="tool-heading">批量操作</div><div class="toolbar batch-actions"><button id="all" class="batch-complete">✓ 完成全部待办</button><button id="skipAll" class="batch-skip">× 跳过全部待办</button><button id="clear" class="batch-clear">清除当天记录</button></div></div><div class="tool-group"><div class="tool-heading">额外学习</div><div class="toolbar extra-actions"><div class="extra-picker" id="extraPicker"><select id="extraType" hidden aria-hidden="true" tabindex="-1"><optgroup label="hc"><option value="行测刷题">hc · 刷题</option><option value="行测视频">hc · 视频学习</option><option value="行测真题">hc · 真题</option><option value="行测复盘">hc · 复盘</option></optgroup><optgroup label="专业知识"><option value="专技岗学习">专业知识</option><option value="专技岗真题">专业知识 · 刷真题</option><option value="专技岗复盘">专业知识 · 错题复盘</option></optgroup><optgroup label="综合真题"><option value="综合真题（限时）">综合真题（限时）</option></optgroup></select><button type="button" id="extraChoice" class="extra-choice kind-hc" aria-expanded="false" aria-controls="extraMenu"><span class="choice-dot"></span><span id="extraChoiceLabel">hc · 刷题</span><span class="choice-chevron" aria-hidden="true">⌄</span></button><div id="extraMenu" class="extra-menu" hidden></div></div><div class="minutes-field"><input id="extraMin" type="number" min="1" max="1440" value="60" aria-label="额外学习分钟数"><span>分钟</span></div><button id="extraAdd" class="extra-add">＋ 添加额外学习</button></div></div></div><div class="note-card"><label for="note" class="note-label">今日笔记 <span>学习进度 · 错题 · 下次继续</span></label><textarea id="note" placeholder="今天学到哪里？有哪些需要复习的内容？"></textarea></div><small id="notice" role="status"></small></section>
 <section><details id="calendarDetails" class="collapsible"><summary>学习日历 <small>按月份查看每日完成情况</small></summary><div class="calendarWrap"><div class="section-controls"><button id="mp" aria-label="上个月" title="上个月">‹</button><strong id="calTitle"></strong><button id="mn" aria-label="下个月" title="下个月">›</button></div><div id="calendar" class="calendar"></div><div class="calendar-legend"><span><i style="--swatch:#e4f4eb"></i>全部完成</span><span><i style="--swatch:#fff3d9"></i>部分处理</span><span><i style="--swatch:#fce9df"></i>全部跳过</span><span><i style="--swatch:#e6eefb"></i>全部已处理（含跳过）</span><span><i style="--swatch:#ffffff"></i>未打卡</span><span><i style="--swatch:#f5f7fa"></i>计划外</span></div></div></details></section>
 <section><details id="weekplan"><summary>所选周计划 <small id="weekPlanRange"></small></summary><div id="weekPlan" class="tablewrap weekplan"></div></details></section>
-<section><details id="phaseDetails"><summary>阶段安排</summary><div class="tablewrap"><table><thead><tr><th>阶段</th><th>日期</th><th>hc</th><th>专业知识</th></tr></thead><tbody><tr><td>基础</td><td>11.27—1.19</td><td>整块视频为主，碎片刷题、复盘</td><td>自主学习</td></tr><tr><td>强化</td><td>1.20—3.4</td><td>专项刷题、错题复盘</td><td>自主学习</td></tr><tr><td>冲刺</td><td>3.5—4.4</td><td>历年真题、限时训练、错题复盘</td><td>历年真题、实务题、薄弱知识回顾</td></tr></tbody></table></div><p class="sectionnote">3月5—28日两科均以真题为主，周日安排综合真题限时训练，暂按150分钟模拟、30分钟初步复盘；两科时长按40:60拆分统计。3月29日起两科均以真题错题二刷和重点回顾为主，4月4日仅学习2小时。春节保持正常安排。</p></details></section>
-<section><details id="distributionDetails" class="collapsible"><summary>本周 / 本月学习分布 <small>查看 hc 与专业知识的投入结构</small></summary><div id="distribution" class="dist-wrap"></div></details></section><section><details id="weeklyDetails"><summary>每周学习时长</summary><div id="weekly" class="scroll tablewrap"></div></details></section><section><details id="monthlyDetails"><summary>每月学习时长</summary><div id="monthly" class="tablewrap"></div></details></section>
+<section><details id="phaseDetails"><summary>阶段安排</summary><div class="tablewrap"><table><thead><tr><th>阶段</th><th>日期</th><th>hc</th><th>专业知识</th></tr></thead><tbody><tr><td>基础</td><td>11.27—1.19</td><td>整块视频为主，碎片刷题、复盘</td><td>自主学习</td></tr><tr><td>强化</td><td>1.20—3.4</td><td>专项刷题、错题复盘</td><td>自主学习</td></tr><tr><td>冲刺</td><td>3.5—4.4</td><td>历年真题、限时训练、错题复盘</td><td>历年真题、实务题、薄弱知识回顾</td></tr></tbody></table></div><p class="sectionnote">工作日另预留1小时工作间隙，自主安排学习内容，忙时可跳过。3月5—28日两科均以真题为主，周日安排综合真题限时训练，暂按150分钟模拟、30分钟初步复盘；两科时长按40:60拆分统计。3月29日起两科均以真题错题二刷和重点回顾为主，4月4日仅学习2小时。春节保持正常安排。</p></details></section>
+<section><details id="distributionDetails" class="collapsible"><summary>本周 / 本月学习分布 <small>查看两科与自主安排的投入时间</small></summary><div id="distribution" class="dist-wrap"></div></details></section><section><details id="weeklyDetails"><summary>每周学习时长</summary><div id="weekly" class="scroll tablewrap"></div></details></section><section><details id="monthlyDetails"><summary>每月学习时长</summary><div id="monthly" class="tablewrap"></div></details></section>
 <section><details id="backupDetails"><summary>数据备份</summary><p>数据保存在当前浏览器 localStorage 中，无需联网。请定期导出 JSON 备份，换电脑、浏览器或移动文件后可导入恢复。</p><div class="toolbar"><button id="export">导出备份 JSON</button><button id="import">导入备份 JSON</button><input type="file" id="file" accept=".json,application/json" hidden></div></details></section><footer>周统计按周一至周日，月统计按自然月。固定计划不包含额外学习；额外学习计入实际与动态预计。目标日期为个人暂定日期。</footer></main><script>
 function oldPlan(s){let day=parse(s).getDay(),base=stage(s)==='基础',a=base?'行测视频':stage(s)==='冲刺'?'行测真题':'行测刷题',b=base?'专技岗学习':'专技岗刷题',p=[];let t=(id,time,name,min)=>p.push({id,time,name,min});if(day>=1&&day<=5){t('am','08:00–08:30',base?(day%2?a:b):day%2?'行测复盘':b,30);t('mid','12:25–12:50',base?'行测刷题':a,25);if(day!==5){t('pm','19:00–21:00',day===2?a:b,120);t('review','21:00–21:30','行测复盘',30)}}else if(day===6){t('am','09:00–12:00',b,180);t('mid','15:00–17:00',a,120);t('pm','18:00–20:00','专技岗刷题',120)}else{if(stage(s)==='冲刺'&&s<'2027-03-29'){t('am','09:00–10:00','行测真题',60);t('amPractice','10:00–11:30','专技岗刷题',90);t('mockReview','11:30–12:00','行测复盘',30)}else if(base){t('am','09:00–11:00',a,120);t('amPractice','11:00–12:00','行测刷题',60)}else t('am','09:00–12:00',s>='2027-03-29'?'行测复盘':a,180);t('mid','15:00–17:00',b,120);if(Math.floor(diff('2026-11-26',s)/7)%2===0||stage(s)==='冲刺')t('pm','18:00–20:00','错题复盘',120)}if(s>='2027-03-29'){p=p.filter(t=>s!=='2027-04-04'||t.id==='am');for(let t of p)if(t.name==='行测真题')t.name='行测复盘';if(s==='2027-04-04'){p=[{id:'am',time:'09:00–10:00',name:'行测复盘',min:60},{id:'mid',time:'10:00–11:00',name:'专技岗学习',min:60}]}}return p}'use strict';
 const $=id=>document.getElementById(id),START='2026-11-27',END='2027-04-04',EXAM='2027-04-05',KEY='js-career-study-2027-v1',SCHEMA=2;
 const parse=s=>new Date(s+'T12:00:00'),fmt=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,add=(s,n)=>{let d=parse(s);d.setDate(d.getDate()+n);return fmt(d)},clamp=s=>s<START?START:s>END?END:s,now=()=>fmt(new Date()),diff=(a,b)=>Math.round((parse(b)-parse(a))/86400000),hours=n=>`${(n/60).toFixed(2).replace(/0$/,'').replace(/\.0$/,'')} h`,duration=n=>`${Math.floor(n/60)}小时${n%60?Math.round(n%60)+'分':''}`;
 function dates(a,b){let out=[];for(let s=a;s<=b;s=add(s,1))out.push(s);return out}const allDates=dates(START,END);function range(a,b){return allDates.filter(s=>s>=a&&s<=b)}function weekStart(s){return add(s,-((parse(s).getDay()+6)%7))}function monthEnd(m){let d=parse(m+'-01');d.setMonth(d.getMonth()+1);d.setDate(0);return fmt(d)}function stage(s){return s<'2027-01-20'?'基础':s<'2027-03-05'?'强化':'冲刺'}
-function plan(s){if(s<START||s>END)return [];let day=parse(s).getDay(),base=stage(s)==='基础',sprint=stage(s)==='冲刺',last=s>='2027-03-29',a=base?'行测视频':last?'行测复盘':sprint?'行测真题':'行测刷题',q=last?'行测复盘':sprint?'行测真题':'行测刷题',b=last?'专技岗复盘':sprint?'专技岗真题':'专技岗学习',p=[];let t=(id,time,name,min)=>p.push({id,time,name,min});if(s==='2027-04-04'){t('am','09:00–10:00','行测复盘',60);t('mid','10:00–11:00',b,60);return p}if(day>=1&&day<=5){t('am','08:00–08:30',b,30);t('mid','12:25–12:50',q,25);if(day!==5){t('pm','19:00–21:00',[2,4].includes(day)?a:b,120);t('review','21:00–21:30','行测复盘',30)}}else if(day===6){t('am','09:00–12:00',b,180);t('mid','15:00–17:00',a,120);t('pm','18:00–20:00',b,120)}else{if(sprint&&!last){t('am','09:00–11:30','综合真题（限时）',150);t('mockReview','11:30–12:00','综合复盘',30)}else t('am','09:00–12:00',a,180);t('mid','15:00–17:00',b,120);if(sprint||Math.floor(diff(weekStart(START),weekStart(s))/7)%2===0)t('pm','18:00–20:00','行测复盘',120)}return p}
-function display(n){return ({'行测学习':'hc · 视频学习','行测视频':'hc · 视频学习','行测刷题':'hc · 刷题','行测真题':'hc · 刷真题','行测复盘':'hc · 复盘','专技岗学习':'专业知识','专技岗刷题':'专业知识','专技岗复盘':'专业知识 · 错题复盘','专技岗真题':'专业知识 · 刷真题','综合限时练习':'综合真题（限时）','错题复盘':'综合复盘'})[n]||n}function category(n){return n.startsWith('专技岗')||n==='专业知识'?'b':n.includes('复盘')?'e':n.includes('视频')||n==='行测学习'?'a':n.startsWith('行测')?'c':'d'}function hcShare(n){return n.startsWith('行测')||n.startsWith('hc')?1:n.startsWith('专技岗')||n==='专业知识'||n==='jsj'?0:0.4}
+function plan(s){if(s<START||s>END)return [];let day=parse(s).getDay(),base=stage(s)==='基础',sprint=stage(s)==='冲刺',last=s>='2027-03-29',a=base?'行测视频':last?'行测复盘':sprint?'行测真题':'行测刷题',q=last?'行测复盘':sprint?'行测真题':'行测刷题',b=last?'专技岗复盘':sprint?'专技岗真题':'专技岗学习',p=[];let t=(id,time,name,min)=>p.push({id,time,name,min});if(s==='2027-04-04'){t('am','09:00–10:00','行测复盘',60);t('mid','10:00–11:00',b,60);return p}if(day>=1&&day<=5){t('am','08:00–08:30',b,30);t('mid','12:25–12:50',q,25);t('work','工作间隙','自主安排',60);if(day!==5){t('pm','19:00–21:00',[2,4].includes(day)?a:b,120);t('review','21:00–21:30','行测复盘',30)}}else if(day===6){t('am','09:00–12:00',b,180);t('mid','15:00–17:00',a,120);t('pm','18:00–20:00',b,120)}else{if(sprint&&!last){t('am','09:00–11:30','综合真题（限时）',150);t('mockReview','11:30–12:00','综合复盘',30)}else t('am','09:00–12:00',a,180);t('mid','15:00–17:00',b,120);if(sprint||Math.floor(diff(weekStart(START),weekStart(s))/7)%2===0)t('pm','18:00–20:00','行测复盘',120)}return p}
+function display(n){return ({'行测学习':'hc · 视频学习','行测视频':'hc · 视频学习','行测刷题':'hc · 刷题','行测真题':'hc · 刷真题','行测复盘':'hc · 复盘','专技岗学习':'专业知识','专技岗刷题':'专业知识','专技岗复盘':'专业知识 · 错题复盘','专技岗真题':'专业知识 · 刷真题','综合限时练习':'综合真题（限时）','错题复盘':'综合复盘'})[n]||n}function category(n){if(isFlexible(n))return 'f';return n.startsWith('专技岗')||n==='专业知识'?'b':n.includes('复盘')?'e':n.includes('视频')||n==='行测学习'?'a':n.startsWith('行测')?'c':'d'}function isFlexible(n){return n==='自主安排'}function hcShare(n){return n.startsWith('行测')||n.startsWith('hc')?1:n.startsWith('专技岗')||n==='专业知识'||n==='jsj'?0:0.4}
 function empty(){return {tasks:{},extra:[],note:''}}let data={};function normalize(raw,version){let result={};for(let [s,r] of Object.entries(raw)){if(!/^\d{4}-\d{2}-\d{2}$/.test(s)||!r||typeof r.tasks!=='object'||!r.tasks||!Array.isArray(r.extra)||typeof r.note!=='string')throw Error('bad record');let next={tasks:{},extra:[],note:r.note};for(let e of r.extra){if(!e||typeof e.name!=='string'||!Number.isInteger(e.min)||e.min<0||e.min>1440)throw Error('bad extra');next.extra.push({name:e.name,min:e.min})}for(let [id,v] of Object.entries(r.tasks)){if(!v||!Number.isInteger(v.min)||v.min<0||v.min>1440)throw Error('bad task');if(version===2){if(!['pending','done','skipped'].includes(v.status))throw Error('bad status');next.tasks[id]={status:v.status,min:v.min,name:typeof v.name==='string'?v.name:''};continue}if(!v.done)continue;let old=oldPlan(s).find(t=>t.id===id),p=plan(s).find(t=>t.id===id),name=v.name||old?.name||'错题复盘';if(p&&old&&p.time===old.time&&hcShare(p.name)===hcShare(name)){next.tasks[id]={status:'done',min:v.min,name}}else{next.extra.push({name,min:v.min})}}result[s]=next}return result}
 let storageProblem=false;try{let raw=JSON.parse(localStorage.getItem(KEY)||'{}')||{};data=raw.version===2?normalize(raw.data,2):normalize(raw,1)}catch(e){storageProblem=true}let selected=clamp(now()),cal=selected.slice(0,7); let pickerCal=selected.slice(0,7);function save(){try{localStorage.setItem(KEY,JSON.stringify({version:SCHEMA,data}));$('notice').textContent='已自动保存到本地'}catch(e){$('notice').textContent='本地保存失败，请立即导出备份'}}function rec(s){return data[s]||(data[s]=empty())}function status(s,t){return data[s]?.tasks?.[t.id]?.status||'pending'}
-function aggregate(ds){let a={planned:0,donePlan:0,skipped:0,pending:0,past:0,actual:0,extra:0,hcPlan:0,hcActual:0,hcSkipped:0,hcPending:0,video:0,practice:0,review:0,videoPlan:0};for(let s of ds){let r=data[s];for(let t of plan(s)){let v=r?.tasks?.[t.id],st=v?.status||'pending',share=hcShare(t.name);a.planned+=t.min;a.hcPlan+=t.min*share;if(t.name==='行测视频')a.videoPlan+=t.min;if(st==='done'){a.donePlan+=t.min;record(v.name||t.name,v.min)}else if(st==='skipped'){a.skipped+=t.min;a.hcSkipped+=t.min*share}else{a.pending+=t.min;a.hcPending+=t.min*share;if(s<now())a.past+=t.min}}for(let e of r?.extra||[]){a.extra+=e.min;record(e.name,e.min)}}function record(name,min){a.actual+=min;a.hcActual+=min*hcShare(name);if(['行测视频','行测学习'].includes(name))a.video+=min;else if(['行测刷题','行测真题'].includes(name))a.practice+=min;else if(name==='行测复盘')a.review+=min}a.forecast=a.actual+a.pending;return a}
+function aggregate(ds){
+  let a={planned:0,donePlan:0,skipped:0,pending:0,past:0,actual:0,extra:0,hcPlan:0,hcActual:0,hcSkipped:0,hcPending:0,freePlan:0,freeActual:0,freeSkipped:0,freePending:0,video:0,practice:0,review:0,videoPlan:0};
+  for(let s of ds){let r=data[s];for(let t of plan(s)){
+    let v=r?.tasks?.[t.id],st=v?.status||'pending',free=isFlexible(t.name),share=free?0:hcShare(t.name);
+    a.planned+=t.min;a.hcPlan+=t.min*share;if(free)a.freePlan+=t.min;if(t.name==='行测视频')a.videoPlan+=t.min;
+    if(st==='done'){a.donePlan+=t.min;record(v.name||t.name,v.min)}
+    else if(st==='skipped'){a.skipped+=t.min;a.hcSkipped+=t.min*share;if(free)a.freeSkipped+=t.min}
+    else{a.pending+=t.min;a.hcPending+=t.min*share;if(free)a.freePending+=t.min;if(s<now())a.past+=t.min}
+  }for(let e of r?.extra||[]){a.extra+=e.min;record(e.name,e.min)}}
+  function record(name,min){a.actual+=min;if(isFlexible(name)){a.freeActual+=min;return}a.hcActual+=min*hcShare(name);if(['行测视频','行测学习'].includes(name))a.video+=min;else if(['行测刷题','行测真题'].includes(name))a.practice+=min;else if(name==='行测复盘')a.review+=min}
+  a.forecast=a.actual+a.pending;return a;
+}
 function el(tag,cls,txt){let e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}function button(txt,cls,fn){let b=el('button',cls,txt);b.type='button';b.onclick=fn;return b}function setTask(t,st,min){let r=rec(selected);if(st==='pending'){delete r.tasks[t.id]}else r.tasks[t.id]={status:st,name:t.name,min:st==='skipped'?t.min:min};save();render()}
-function renderTasks(){let r=rec(selected),p=plan(selected);$('phase').textContent=stage(selected)+'阶段';$('prev').disabled=selected===START;$('next').disabled=selected===END;$('focus').textContent=selected<'2027-01-20'?'hc 视频集中在完整时段；短时段刷题、复盘或专业知识。':selected<'2027-03-05'?'hc 刷题为主，专业知识自主安排。':selected<'2027-03-29'?'hc 与专业知识均刷历年真题；周日综合真题限时训练。':selected===END?'轻量回顾，下午和晚上休息。':'hc 与专业知识均进行真题错题二刷和重点回顾，不再大量做新题。';$('note').value=r.note||'';let root=$('tasks');root.replaceChildren();for(let t of p){let v=r.tasks[t.id],st=v?.status||'pending',row=el('div','task '+st),num=el('input');num.type='number';num.min=0;num.max=1440;num.step=1;num.value=st==='done'?v.min:t.min;num.setAttribute('aria-label',t.time+' 实际分钟');num.disabled=st==='skipped';let label=el('div');label.append(el('span','tag '+category(t.name),display(st==='done'?v.name||t.name:t.name)),el('div','status',st==='done'?'已完成':st==='skipped'?'已跳过':'待完成 · 计划 '+t.min+' 分钟'));let minute=el('div','minute');minute.append(num,el('small','','分'));let actions=el('div','actions');let read=()=>{let n=Number(num.value);return Number.isInteger(n)&&n>=0&&n<=1440&&num.value!==''?n:null};if(st==='pending'){actions.append(button('✓ 完成','primary',()=>{let n=read();if(n===null||n===0)return alert('请输入1–1440分钟');setTask(t,'done',n)}),button('× 跳过','skipbtn',()=>setTask(t,'skipped',t.min)))}else{actions.append(button('撤销','',()=>setTask(t,'pending',0)));if(st==='done'){num.onchange=()=>{let n=read();if(n===null||n===0){num.value=v.min;return alert('请输入1–1440分钟')}v.min=n;save();stats()}}}row.append(el('span','time',t.time),label,minute,actions);root.append(row)}for(let [i,t] of r.extra.entries()){let row=el('div','task extra'),actions=el('div','actions');actions.append(button('删除','',()=>{r.extra.splice(i,1);save();render()}));row.append(el('span','time','额外学习'),el('span','tag '+category(t.name),display(t.name)),el('span','',t.min+' 分钟'),actions);root.append(row)}if(parse(selected).getDay()===5||!p.some(t=>t.id==='pm'))root.append(el('p','muted','今晚安排休息（不计入计划或跳过时长）'));$('all').disabled=!p.some(t=>status(selected,t)==='pending');$('skipAll').disabled=$('all').disabled}
+function renderTasks(){
+  let r=rec(selected),p=plan(selected);
+  $('phase').textContent=stage(selected)+'阶段';$('prev').disabled=selected===START;$('next').disabled=selected===END;
+  $('focus').textContent=stage(selected)==='基础'?'基础阶段保留整块学习时间，具体内容按自己的进度安排。':stage(selected)==='强化'?'强化阶段按自己的薄弱项调整学习内容，时段可灵活使用。':'冲刺阶段预留练习和回顾时间，按自己的进度安排。';
+  $('note').value=r.note||'';let root=$('tasks');root.replaceChildren();
+  for(let t of p){
+    let v=r.tasks[t.id],st=v?.status||'pending',row=el('div','task '+st),num=el('input');
+    row.dataset.taskId=t.id;num.id='task-min-'+t.id;num.type='number';num.min=1;num.max=1440;num.step=1;num.inputMode='numeric';
+    num.value=st==='done'?v.min:t.min;num.setAttribute('aria-label',t.time+' 实际学习分钟');num.disabled=st==='skipped';
+    let label=el('div','task-info');
+    label.append(el('span','tag '+category(t.name),display(st==='done'?v.name||t.name:t.name)),el('div','status',st==='done'?'已完成 · 计划'+t.min+'分钟':st==='skipped'?'已跳过 · 计划'+t.min+'分钟':'待完成 · 计划'+t.min+'分钟'));
+    let minute=el('div','minute'),caption=el('label','','实际时长'),control=el('div','minute-control');caption.htmlFor=num.id;control.append(num,el('small','','分'));minute.append(caption,control);
+    let actions=el('div','actions');
+    let read=()=>{let n=Number(num.value);return Number.isInteger(n)&&n>=1&&n<=1440&&num.value!==''?n:null};
+    if(st==='pending'){
+      actions.append(button('✓ 完成','primary',()=>{let n=read();if(n===null)return alert('请输入1–1440分钟');setTask(t,'done',n)}),button('跳过','skipbtn',()=>setTask(t,'skipped',t.min)));
+    }else{
+      actions.append(button(st==='done'?'撤销完成':'恢复待办','undo',()=>setTask(t,'pending',0)));
+      if(st==='done')num.onchange=()=>{let n=read();if(n===null){num.value=v.min;return alert('请输入1–1440分钟')}v.min=n;save();stats()};
+    }
+    row.append(el('span','time',t.time),label,minute,actions);root.append(row);
+  }
+  for(let[i,t]of r.extra.entries()){
+    let row=el('div','task extra'),label=el('div','task-info'),actions=el('div','actions');label.append(el('span','tag '+category(t.name),display(t.name)));
+    actions.append(button('删除','',()=>{r.extra.splice(i,1);save();render()}));
+    row.append(el('span','time','额外学习'),label,el('span','extra-duration',t.min+'分钟'),actions);root.append(row);
+  }
+  if(parse(selected).getDay()===5||!p.some(t=>t.id==='pm'))root.append(el('p','rest-note',selected===END?'下午和晚上休息，不计入计划时长。':'今晚休息，不计入计划时长。'));
+  $('all').disabled=!p.some(t=>status(selected,t)==='pending');$('skipAll').disabled=$('all').disabled;
+}
+function renderDailySummary(d){
+  $('dailyWeekday').textContent='周'+'日一二三四五六'[parse(selected).getDay()];
+  let root=$('daily');root.replaceChildren();
+  for(let[label,n,cls]of [['计划',d.planned,''],['已学',d.actual,'learned'],['待完成',d.pending,'remaining'],['跳过',d.skipped,'']]){
+    let item=el('div','daily-metric '+cls),value=el('strong','',String(n));value.append(el('small','','分'));item.append(el('span','',label),value);root.append(item);
+  }
+  let p=plan(selected),done=p.filter(t=>status(selected,t)==='done').length,skipped=p.filter(t=>status(selected,t)==='skipped').length,pct=p.length?Math.round(done/p.length*100):0;
+  $('dailyProgressText').textContent='计划任务完成'+done+'/'+p.length+'项'+(skipped?' · 跳过'+skipped+'项':'');
+  $('dailyProgress').setAttribute('aria-valuenow',pct);$('dailyProgress').setAttribute('aria-valuetext',$('dailyProgressText').textContent);$('dailyProgressFill').style.width=pct+'%';
+}
 function card(label,value,sub,cls){let n=el('div','stat '+(cls||''));n.append(el('span','',label),el('strong','',hours(value)),el('small','',sub));return n}function table(headers,rows){let tb=el('table'),head=el('thead'),tr=el('tr');for(let h of headers)tr.append(el('th','',h));head.append(tr);let body=el('tbody');for(let row of rows){let tr=el('tr');for(let c of row)tr.append(el('td','',c));body.append(tr)}tb.append(head,body);return tb}function segments(parent,values){let root=el('div','segments'),sum=values.reduce((a,v)=>a+v[1],0),legend=el('div','legend');for(let [name,n,c] of values){let s=el('span');s.style.width=(sum?n/sum*100:0)+'%';s.style.background=c;root.append(s);let l=el('span'),d=el('i','dot');d.style.background=c;l.append(d,document.createTextNode(name+' '+hours(n)));legend.append(l)}parent.append(root,legend)}function percent(a,b){return b?`${(a/b*100).toFixed(1)}%`:'—'}
-function renderOverview(a){let root=$('overviewContent');root.replaceChildren();$('overviewShort').textContent=`已学 ${hours(a.actual)} · hc ${hours(a.hcActual)} · 专业知识 ${hours(a.actual-a.hcActual)} · 跳过 ${hours(a.skipped)} · 剩余 ${hours(a.pending)}`;let g=el('div','overview');g.append(card('原定总学习',a.planned,'固定计划，不含额外学习'),card('累计已学',a.actual,'含额外 '+hours(a.extra),'actual'),card('已叉掉 / 跳过',a.skipped,'按原定分钟扣除','lost'),card('剩余待完成',a.pending,'含过期待处理 '+hours(a.past)),card('动态预计总学习',a.forecast,'已学 + 剩余待完成','forecast'),card('hc 累计已学',a.hcActual,'原计划 '+hours(a.hcPlan)+' · 实际占比 '+percent(a.hcActual,a.actual),'hcactual'),card('专业知识累计已学',a.actual-a.hcActual,'原计划 '+hours(a.planned-a.hcPlan)+' · 实际占比 '+percent(a.actual-a.hcActual,a.actual),'proactual'),card('已处理的计划',a.donePlan+a.skipped,percent(a.donePlan+a.skipped,a.planned)));root.append(g,el('strong','','两科实际学习时长分布'));segments(root,[['hc',a.hcActual,'#2563eb'],['专业知识',a.actual-a.hcActual,'#9333ea']]);root.append(el('p','sectionnote','实际学习时长包含完成任务及额外学习，不含跳过的时间。'),el('strong','','固定计划处理进度'));segments(root,[['已完成对应计划',a.donePlan,'#22a06b'],['已跳过',a.skipped,'#e7a44e'],['待完成',a.pending,'#cbd5e1']]);root.append(el('p','sectionnote','动态预计假设剩余任务按原计划完成，不预估未来额外学习；完成但用时不足/超出会按实际分钟修正。过期未处理的任务仍计入待完成。'));let t=el('div','tablewrap');t.append(table(['类别','原计划','已学','跳过','待完成','动态预计'],[['hc',a.hcPlan,a.hcActual,a.hcSkipped,a.hcPending,a.hcActual+a.hcPending],['专业知识',a.planned-a.hcPlan,a.actual-a.hcActual,a.skipped-a.hcSkipped,a.pending-a.hcPending,a.forecast-a.hcActual-a.hcPending]].map(r=>[r[0],...r.slice(1).map(hours)])));root.append(t);root.append(el('p','sectionnote','综合真题（限时）与综合复盘按 hc 40%、专业知识 60% 分摊；额外学习不计入原计划。'))}
+function renderOverview(a){
+  let proActual=a.actual-a.hcActual-a.freeActual,proPlan=a.planned-a.hcPlan-a.freePlan,proSkipped=a.skipped-a.hcSkipped-a.freeSkipped,proPending=a.pending-a.hcPending-a.freePending;
+  let root=$('overviewContent');root.replaceChildren();
+  $('overviewShort').textContent='已学'+hours(a.actual)+' · 跳过'+hours(a.skipped)+' · 剩余'+hours(a.pending);
+  let g=el('div','overview');
+  g.append(card('原定总学习',a.planned,'含工作间隙，不含额外学习'),card('累计已学',a.actual,'含额外'+hours(a.extra),'actual'),card('已跳过',a.skipped,'按原定分钟扣除','lost'),card('剩余待完成',a.pending,'含过期待处理'+hours(a.past)),card('动态预计总学习',a.forecast,'已学+剩余待完成','forecast'),card('hc累计已学',a.hcActual,'原计划'+hours(a.hcPlan),'hcactual'),card('专业知识累计已学',proActual,'原计划'+hours(proPlan),'proactual'),card('自主安排已学',a.freeActual,'工作间隙，不分摊到两科'));
+  root.append(g,el('strong','','实际学习时间分布'));
+  segments(root,[['hc',a.hcActual,'#2563eb'],['专业知识',proActual,'#9333ea'],['自主安排',a.freeActual,'#357f88']]);
+  root.append(el('p','sectionnote','已学包含完成任务及额外学习，不包含跳过的时间。'),el('strong','','计划任务处理进度'));
+  segments(root,[['已完成对应计划',a.donePlan,'#22a06b'],['已跳过',a.skipped,'#e7a44e'],['待完成',a.pending,'#cbd5e1']]);
+  root.append(el('p','sectionnote','动态预计按剩余计划时长计算；已完成的任务以实际分钟为准。过期未处理的任务保留待办。'));
+  let t=el('div','tablewrap');t.append(table(['类别','原计划','已学','跳过','待完成','动态预计'],[['hc',a.hcPlan,a.hcActual,a.hcSkipped,a.hcPending,a.hcActual+a.hcPending],['专业知识',proPlan,proActual,proSkipped,proPending,proActual+proPending],['自主安排',a.freePlan,a.freeActual,a.freeSkipped,a.freePending,a.freeActual+a.freePending]].map(r=>[r[0],...r.slice(1).map(hours)])));root.append(t);
+  root.append(el('p','sectionnote','综合真题与综合复盘沿用hc40%、专业知识60%的统计比例；自主安排单独统计。此比例仅用于个人记录。'));
+}
 function bar(root,label,n,max,color){let row=el('div','barline'),track=el('div','track'),fill=el('div','fill');fill.style.width=(max?Math.min(100,n/max*100):0)+'%';if(color)fill.style.background=color;track.append(fill);row.append(el('span','',label),track,el('span','',hours(n)));root.append(row)}
 function renderWeekPlan(w){let root=$('weekPlan');root.replaceChildren();$('weekPlanRange').textContent=w+' ~ '+add(w,6);let tb=el('table'),tr=el('tr');for(let i=0;i<7;i++){let s=add(w,i);tr.append(el('th','',`周${'一二三四五六日'[i]} ${s.slice(5)}`))}let head=el('thead');head.append(tr);tb.append(head);let body=el('tbody'),row=el('tr');for(let i=0;i<7;i++){let s=add(w,i),cell=el('td');if(s<START||s>END)cell.append(el('small','','—'));else{for(let t of plan(s)){cell.append(el('small','',t.time),el('span','tag '+category(t.name),display(t.name)))}if(!plan(s).some(t=>t.id==='pm'))cell.append(el('small','','晚间休息'))}row.append(cell)}body.append(row);tb.append(body);root.append(tb)}
-function stats(){let w=weekStart(selected),m=selected.slice(0,7),wd=range(w,add(w,6)),md=range(m+'-01',monthEnd(m)),a=aggregate(allDates),wa=aggregate(wd),ma=aggregate(md),d=aggregate([selected]);$('count').textContent=Math.max(0,diff(now(),EXAM))+' 天';$('week').textContent=hours(wa.actual);$('weekRange').textContent=w+' ~ '+add(w,6);$('month').textContent=hours(ma.actual);$('monthRange').textContent=m;$('total').textContent=hours(a.actual);$('days').textContent=allDates.filter(s=>aggregate([s]).actual>0).length+' 天已学习';$('daily').textContent=selected+' · 周'+'日一二三四五六'[parse(selected).getDay()]+' · 计划 '+hours(d.planned)+' / 已学 '+hours(d.actual)+' / 跳过 '+hours(d.skipped)+' / 待完成 '+hours(d.pending);renderOverview(a);calendar();renderWeekPlan(w);let dist=$('distribution');dist.replaceChildren();for(let [name,n] of [['所选周',wa],['所选月',ma]]){dist.append(el('strong','',name));bar(dist,'hc',n.hcActual,n.actual,'#3980c9');bar(dist,'专业知识',n.actual-n.hcActual,n.actual,'#8b5cc7');bar(dist,'hc 视频',n.video,n.hcActual,'#3980c9');bar(dist,'hc 刷题/真题',n.practice,n.hcActual,'#22a06b');bar(dist,'hc 复盘',n.review,n.hcActual,'#d6a243')}let weekly=[],monthly=[];for(let s=weekStart(START);s<=END;s=add(s,7)){let ds=range(s,add(s,6));weekly.push([ds[0].slice(5)+' ~ '+ds.at(-1).slice(5),aggregate(ds)])}for(let m of [...new Set(allDates.map(s=>s.slice(0,7)))])monthly.push([m,aggregate(range(m+'-01',monthEnd(m)))]);for(let [id,rows] of [['weekly',weekly],['monthly',monthly]]){$(id).replaceChildren(table(['日期','计划','已学','跳过','待完成','动态预计'],rows.map(([s,n])=>[s,...[n.planned,n.actual,n.skipped,n.pending,n.forecast].map(hours)])))}}
+function stats(){let w=weekStart(selected),m=selected.slice(0,7),wd=range(w,add(w,6)),md=range(m+'-01',monthEnd(m)),a=aggregate(allDates),wa=aggregate(wd),ma=aggregate(md),d=aggregate([selected]);$('count').textContent=Math.max(0,diff(now(),EXAM))+' 天';$('week').textContent=hours(wa.actual);$('weekRange').textContent=w+' ~ '+add(w,6);$('month').textContent=hours(ma.actual);$('monthRange').textContent=m;$('total').textContent=hours(a.actual);$('days').textContent=allDates.filter(s=>aggregate([s]).actual>0).length+' 天已学习';renderDailySummary(d);renderOverview(a);calendar();renderWeekPlan(w);let dist=$('distribution');dist.replaceChildren();for(let [name,n] of [['所选周',wa],['所选月',ma]]){dist.append(el('strong','',name));bar(dist,'hc',n.hcActual,n.actual,'#3980c9');bar(dist,'专业知识',n.actual-n.hcActual-n.freeActual,n.actual,'#8b5cc7');bar(dist,'自主安排',n.freeActual,n.actual,'#357f88');bar(dist,'hc 视频',n.video,n.hcActual,'#3980c9');bar(dist,'hc 刷题/真题',n.practice,n.hcActual,'#22a06b');bar(dist,'hc 复盘',n.review,n.hcActual,'#d6a243')}let weekly=[],monthly=[];for(let s=weekStart(START);s<=END;s=add(s,7)){let ds=range(s,add(s,6));weekly.push([ds[0].slice(5)+' ~ '+ds.at(-1).slice(5),aggregate(ds)])}for(let m of [...new Set(allDates.map(s=>s.slice(0,7)))])monthly.push([m,aggregate(range(m+'-01',monthEnd(m)))]);for(let [id,rows] of [['weekly',weekly],['monthly',monthly]]){$(id).replaceChildren(table(['日期','计划','已学','跳过','待完成','动态预计'],rows.map(([s,n])=>[s,...[n.planned,n.actual,n.skipped,n.pending,n.forecast].map(hours)])))}}
 function calendar(){let root=$('calendar');root.replaceChildren();$('calTitle').textContent=cal.slice(0,4)+'年'+Number(cal.slice(5))+'月';$('mp').disabled=cal<=START.slice(0,7);$('mn').disabled=cal>=END.slice(0,7);for(let x of ['一','二','三','四','五','六','日'])root.append(el('div','weekday',x));let first=cal+'-01';for(let i=0;i<(parse(first).getDay()+6)%7;i++)root.append(el('div'));for(let s of dates(first,monthEnd(cal))){let b=el('button','day');b.disabled=s<START||s>END;let p=plan(s),n=aggregate([s]),states=p.map(t=>status(s,t));if(!b.disabled){if(states.length&&states.every(st=>st==='done'))b.classList.add('hit');else if(states.length&&states.every(st=>st==='skipped'))b.classList.add('skipped');else if(states.length&&states.every(st=>st!=='pending'))b.classList.add('resolved');else if(states.some(st=>st!=='pending')||n.actual)b.classList.add('partial');if(s<now())b.classList.add('past')}if(s===selected)b.classList.add('selected');b.append(el('span','',String(parse(s).getDate())),el('small','',b.disabled?'—':n.actual?hours(n.actual):n.skipped?'× '+hours(n.skipped):''));b.title=`${s} 已学 ${hours(n.actual)} / 跳过 ${hours(n.skipped)}`;b.onclick=()=>choose(s);root.append(b)}}function renderPicker(){let root=$('pickerGrid');if(!root)return;root.replaceChildren();$('pickerTitle').textContent=pickerCal.replace('-', '年')+'月';for(let x of ['一','二','三','四','五','六','日'])root.append(el('div','picker-weekday',x));let first=pickerCal+'-01', startOffset=(parse(first).getDay()+6)%7; for(let i=0;i<startOffset;i++) root.append(el('div')); for(let s of dates(first,monthEnd(pickerCal))){let b=el('button','picker-day'); let disabled=s<START||s>END; if(disabled){b.classList.add('disabled'); b.disabled=true}else{if(s===selected)b.classList.add('active'); if(s===now())b.classList.add('todayMark'); b.onclick=()=>{choose(s); closePicker();}} b.append(el('span','',String(parse(s).getDate()))); b.title=s; root.append(b)}}
 function openPicker(){pickerCal=selected.slice(0,7);renderPicker();$('datePanel').classList.remove('hidden')}
 function closePicker(){$('datePanel').classList.add('hidden')}
