@@ -193,8 +193,37 @@ header{margin-bottom:16px}
   .date-controls .datebtn:after{display:none}
 }
 
+.sync-strip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-3px 0 14px;padding:0 3px;color:#64748b;font-size:13px}
+#syncStatus{flex:1;min-width:120px;line-height:1.5}
+#syncStatus[data-kind=synced]{color:#147350}
+#syncStatus:is([data-kind=error],[data-kind=conflict]){color:#a45e24}
+.sync-strip button{min-height:38px;padding:6px 10px;border-radius:9px;font-size:13px}
+.sync-strip button[hidden]{display:none}
+.sync-dialog{width:min(540px,calc(100% - 28px));max-height:88dvh;border:1px solid #d7e2f0;border-radius:17px;padding:22px;color:#24324a;box-shadow:0 20px 70px #122b4b3b;overflow:auto}
+.sync-dialog::backdrop{background:#122b4b70}
+.sync-dialog h2{font-size:20px;margin:0}
+.sync-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}
+.sync-dialog-head button{min-width:44px;min-height:44px;font-size:14px}
+.sync-dialog p,.sync-dialog li{font-size:14px;line-height:1.8}
+.sync-dialog ol{padding-left:21px;margin:12px 0}
+.sync-dialog a{color:#2459a8;text-underline-offset:3px}
+.sync-dialog label{display:block;font-size:14px;margin-top:15px}
+.sync-dialog input{display:block;width:100%;min-height:46px;margin-top:6px;font-size:16px;border-radius:9px;padding:10px 12px}
+.sync-dialog .sync-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}
+.sync-dialog .sync-actions button{min-height:46px;border-radius:9px;font-size:15px}
+.sync-feedback{min-height:23px;font-size:13px!important;color:#9a5526;margin-top:12px}
+.sync-dialog details{border:1px solid #e0e8f2;border-radius:10px;padding:10px 12px;background:#f7f9fc;margin-top:16px}
+.sync-dialog summary{font-size:14px}
+.sync-dialog code{font-size:13px;overflow-wrap:anywhere}
+.sync-conflict{border:1px solid #e1e7ef;border-radius:12px;padding:12px;margin-top:12px}
+.sync-conflict legend{font-size:14px;font-weight:600;padding:0 5px}
+.sync-conflict label{display:flex;align-items:flex-start;gap:8px;margin:8px 0;font-size:14px}
+.sync-conflict input{width:18px;min-height:18px;margin:4px 0 0;flex:none;accent-color:#2459a8}
+.sync-conflict pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.7 inherit;margin:6px 0 0;max-height:150px;overflow:auto;color:#64748b}
+@media(max-width:650px){.sync-strip{margin-bottom:12px}.sync-dialog{padding:16px}.sync-dialog-head{margin-bottom:8px}}
 </style></head><body><main>
 <header><h1>个人学习记录</h1><p>2026.11.27 — 2027.04.04</p><small>目标日期：2027年4月5日 · 周五晚固定休息</small></header>
+<div class="sync-strip"><span id="syncStatus" role="status">仅保存在此设备</span><button id="syncNow" type="button" hidden>立即同步</button><button id="syncSettings" type="button">连接同步</button></div>
 <section id="dailySection" aria-labelledby="dailyTitle">
   <div class="daily-heading"><div><h2 id="dailyTitle">每日打卡</h2><span id="dailyWeekday" class="daily-weekday"></span></div><span id="phase" class="tag a"></span></div>
   <div class="date-controls"><button id="prev" type="button" aria-label="查看前一天">前一天</button><div class="datepick"><button id="dateBtn" class="datebtn" type="button"></button><div id="datePanel" class="datepanel hidden"><div class="datepanel-head"><button id="pickerPrevMonth" type="button">‹</button><strong id="pickerTitle"></strong><button id="pickerNextMonth" type="button">›</button></div><div id="pickerGrid" class="picker-grid"></div><div class="datepanel-foot"><button id="pickerClose" type="button">关闭</button><button id="pickerToday" type="button">今天</button></div></div></div><button id="next" type="button" aria-label="查看后一天">后一天</button><button id="today" type="button">今天</button></div>
@@ -211,15 +240,38 @@ header{margin-bottom:16px}
 <section><details id="weekplan"><summary>所选周计划 <small id="weekPlanRange"></small></summary><div id="weekPlan" class="tablewrap weekplan"></div></details></section>
 <section><details id="phaseDetails"><summary>阶段安排</summary><div class="tablewrap"><table><thead><tr><th>阶段</th><th>日期</th><th>hc</th><th>专业知识</th></tr></thead><tbody><tr><td>基础</td><td>11.27—1.19</td><td>整块视频为主，碎片刷题、复盘</td><td>自主学习</td></tr><tr><td>强化</td><td>1.20—3.4</td><td>专项刷题、错题复盘</td><td>自主学习</td></tr><tr><td>冲刺</td><td>3.5—4.4</td><td>历年真题、限时训练、错题复盘</td><td>历年真题、实务题、薄弱知识回顾</td></tr></tbody></table></div><p class="sectionnote">工作日另预留1小时工作间隙，自主安排学习内容，忙时可跳过。3月5—28日两科均以真题为主，周日安排综合真题限时训练，暂按150分钟模拟、30分钟初步复盘；两科时长按40:60拆分统计。3月29日起两科均以真题错题二刷和重点回顾为主，4月4日仅学习2小时。春节保持正常安排。</p></details></section>
 <section><details id="distributionDetails" class="collapsible"><summary>本周 / 本月学习分布 <small>查看两科与自主安排的投入时间</small></summary><div id="distribution" class="dist-wrap"></div></details></section><section><details id="weeklyDetails"><summary>每周学习时长</summary><div id="weekly" class="scroll tablewrap"></div></details></section><section><details id="monthlyDetails"><summary>每月学习时长</summary><div id="monthly" class="tablewrap"></div></details></section>
-<section><details id="backupDetails"><summary>数据备份</summary><p>数据保存在当前浏览器 localStorage 中，无需联网。请定期导出 JSON 备份，换电脑、浏览器或移动文件后可导入恢复。</p><div class="toolbar"><button id="export">导出备份 JSON</button><button id="import">导入备份 JSON</button><input type="file" id="file" accept=".json,application/json" hidden></div></details></section><footer>周统计按周一至周日，月统计按自然月。固定计划不包含额外学习；额外学习计入实际与动态预计。目标日期为个人暂定日期。</footer></main><script>
+<section><details id="backupDetails"><summary>数据备份</summary><p>数据保存在当前浏览器 localStorage 中，无需联网。请定期导出 JSON 备份，换电脑、浏览器或移动文件后可导入恢复。</p><div class="toolbar"><button id="export">导出备份 JSON</button><button id="import">导入备份 JSON</button><input type="file" id="file" accept=".json,application/json" hidden></div></details></section><footer>周统计按周一至周日，月统计按自然月。固定计划不包含额外学习；额外学习计入实际与动态预计。目标日期为个人暂定日期。</footer></main>
+<dialog id="syncDialog" class="sync-dialog" aria-labelledby="syncTitle">
+  <div class="sync-dialog-head"><h2 id="syncTitle">连接GitHub同步</h2><button id="syncClose" type="button">关闭</button></div>
+  <p>手机和电脑连接同一个数据仓库，就能接着打卡。已有记录会合并，断网时先保存在此设备。</p>
+  <form id="syncForm">
+    <label for="syncRepo">数据仓库<input id="syncRepo" value="yananetlab/kb-data" placeholder="用户名/仓库名" autocomplete="off" autocapitalize="none" spellcheck="false" required></label>
+    <label for="syncToken">专用访问令牌<input id="syncToken" type="password" placeholder="粘贴GitHub访问令牌" autocomplete="off" autocapitalize="none" spellcheck="false"></label>
+    <p class="muted">令牌只保存在当前浏览器，不会放进网页代码或学习记录备份。已连接时留空即可沿用。</p>
+    <div class="sync-actions"><button id="syncConnect" class="primary" type="submit">保存并同步</button><button id="syncDisconnect" type="button" hidden>断开此设备</button></div>
+  </form>
+  <p id="syncFeedback" class="sync-feedback" role="status"></p>
+  <details><summary>首次连接怎么设置</summary><ol>
+    <li><a href="https://github.com/new" target="_blank" rel="noopener noreferrer">创建仓库kb-data</a>，选择Private，并勾选Add a README file。</li>
+    <li><a id="syncTokenLink" href="https://github.com/settings/personal-access-tokens/new?name=kb-study-sync&amp;target_name=yananetlab&amp;expires_in=180&amp;contents=write" target="_blank" rel="noopener noreferrer">创建专用访问令牌</a>：Repository access选择Only select repositories，只选kb-data；Contents权限设为Read and write。</li>
+    <li>把令牌填入上方，点“保存并同步”。在另一台设备上填同一个仓库和令牌即可。令牌不用发到聊天里。</li>
+  </ol><p>记录保存为<code>study-records.json</code>。打开或切回页面会自动同步；页面停留时约每15秒检查一次。令牌到期后，在这里更新即可。</p></details>
+</dialog>
+<dialog id="syncConflictDialog" class="sync-dialog" aria-labelledby="syncConflictTitle">
+  <div class="sync-dialog-head"><h2 id="syncConflictTitle">这几处修改不一样</h2><button id="syncConflictClose" type="button">稍后处理</button></div>
+  <p>同一项内容在两边都有修改。请选择要保留的版本，继续同步时会合并其他记录。</p>
+  <form id="syncConflictForm"><div id="syncConflictItems"></div><div class="sync-actions"><button id="syncConflictResolve" class="primary" type="submit">按选择继续同步</button><button id="syncConflictExport" type="button">先备份本地记录</button></div></form>
+  <p id="syncConflictFeedback" class="sync-feedback" role="status"></p>
+</dialog>
+<script src="github-sync.js"></script><script>
 function oldPlan(s){let day=parse(s).getDay(),base=stage(s)==='基础',a=base?'行测视频':stage(s)==='冲刺'?'行测真题':'行测刷题',b=base?'专技岗学习':'专技岗刷题',p=[];let t=(id,time,name,min)=>p.push({id,time,name,min});if(day>=1&&day<=5){t('am','08:00–08:30',base?(day%2?a:b):day%2?'行测复盘':b,30);t('mid','12:25–12:50',base?'行测刷题':a,25);if(day!==5){t('pm','19:00–21:00',day===2?a:b,120);t('review','21:00–21:30','行测复盘',30)}}else if(day===6){t('am','09:00–12:00',b,180);t('mid','15:00–17:00',a,120);t('pm','18:00–20:00','专技岗刷题',120)}else{if(stage(s)==='冲刺'&&s<'2027-03-29'){t('am','09:00–10:00','行测真题',60);t('amPractice','10:00–11:30','专技岗刷题',90);t('mockReview','11:30–12:00','行测复盘',30)}else if(base){t('am','09:00–11:00',a,120);t('amPractice','11:00–12:00','行测刷题',60)}else t('am','09:00–12:00',s>='2027-03-29'?'行测复盘':a,180);t('mid','15:00–17:00',b,120);if(Math.floor(diff('2026-11-26',s)/7)%2===0||stage(s)==='冲刺')t('pm','18:00–20:00','错题复盘',120)}if(s>='2027-03-29'){p=p.filter(t=>s!=='2027-04-04'||t.id==='am');for(let t of p)if(t.name==='行测真题')t.name='行测复盘';if(s==='2027-04-04'){p=[{id:'am',time:'09:00–10:00',name:'行测复盘',min:60},{id:'mid',time:'10:00–11:00',name:'专技岗学习',min:60}]}}return p}'use strict';
-const $=id=>document.getElementById(id),START='2026-11-27',END='2027-04-04',EXAM='2027-04-05',KEY='js-career-study-2027-v1',SCHEMA=2;
+const $=id=>document.getElementById(id),START='2026-11-27',END='2027-04-04',EXAM='2027-04-05',KEY='js-career-study-2027-v1',SCHEMA=2;let githubSync=null;
 const parse=s=>new Date(s+'T12:00:00'),fmt=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,add=(s,n)=>{let d=parse(s);d.setDate(d.getDate()+n);return fmt(d)},clamp=s=>s<START?START:s>END?END:s,now=()=>fmt(new Date()),diff=(a,b)=>Math.round((parse(b)-parse(a))/86400000),hours=n=>`${(n/60).toFixed(2).replace(/0$/,'').replace(/\.0$/,'')} h`,duration=n=>`${Math.floor(n/60)}小时${n%60?Math.round(n%60)+'分':''}`;
 function dates(a,b){let out=[];for(let s=a;s<=b;s=add(s,1))out.push(s);return out}const allDates=dates(START,END);function range(a,b){return allDates.filter(s=>s>=a&&s<=b)}function weekStart(s){return add(s,-((parse(s).getDay()+6)%7))}function monthEnd(m){let d=parse(m+'-01');d.setMonth(d.getMonth()+1);d.setDate(0);return fmt(d)}function stage(s){return s<'2027-01-20'?'基础':s<'2027-03-05'?'强化':'冲刺'}
 function plan(s){if(s<START||s>END)return [];let day=parse(s).getDay(),base=stage(s)==='基础',sprint=stage(s)==='冲刺',last=s>='2027-03-29',a=base?'行测视频':last?'行测复盘':sprint?'行测真题':'行测刷题',q=last?'行测复盘':sprint?'行测真题':'行测刷题',b=last?'专技岗复盘':sprint?'专技岗真题':'专技岗学习',p=[];let t=(id,time,name,min)=>p.push({id,time,name,min});if(s==='2027-04-04'){t('am','09:00–10:00','行测复盘',60);t('mid','10:00–11:00',b,60);return p}if(day>=1&&day<=5){t('am','08:00–08:30',b,30);t('mid','12:25–12:50',q,25);t('work','工作间隙','自主安排',60);if(day!==5){t('pm','19:00–21:00',[2,4].includes(day)?a:b,120);t('review','21:00–21:30','行测复盘',30)}}else if(day===6){t('am','09:00–12:00',b,180);t('mid','15:00–17:00',a,120);t('pm','18:00–20:00',b,120)}else{if(sprint&&!last){t('am','09:00–11:30','综合真题（限时）',150);t('mockReview','11:30–12:00','综合复盘',30)}else t('am','09:00–12:00',a,180);t('mid','15:00–17:00',b,120);if(sprint||Math.floor(diff(weekStart(START),weekStart(s))/7)%2===0)t('pm','18:00–20:00','行测复盘',120)}return p}
 function display(n){return ({'行测学习':'hc · 视频学习','行测视频':'hc · 视频学习','行测刷题':'hc · 刷题','行测真题':'hc · 刷真题','行测复盘':'hc · 复盘','专技岗学习':'专业知识','专技岗刷题':'专业知识','专技岗复盘':'专业知识 · 错题复盘','专技岗真题':'专业知识 · 刷真题','综合限时练习':'综合真题（限时）','错题复盘':'综合复盘'})[n]||n}function category(n){if(isFlexible(n))return 'f';return n.startsWith('专技岗')||n==='专业知识'?'b':n.includes('复盘')?'e':n.includes('视频')||n==='行测学习'?'a':n.startsWith('行测')?'c':'d'}function isFlexible(n){return n==='自主安排'}function hcShare(n){return n.startsWith('行测')||n.startsWith('hc')?1:n.startsWith('专技岗')||n==='专业知识'||n==='jsj'?0:0.4}
 function empty(){return {tasks:{},extra:[],note:''}}let data={};function normalize(raw,version){let result={};for(let [s,r] of Object.entries(raw)){if(!/^\d{4}-\d{2}-\d{2}$/.test(s)||!r||typeof r.tasks!=='object'||!r.tasks||!Array.isArray(r.extra)||typeof r.note!=='string')throw Error('bad record');let next={tasks:{},extra:[],note:r.note};for(let e of r.extra){if(!e||typeof e.name!=='string'||!Number.isInteger(e.min)||e.min<0||e.min>1440)throw Error('bad extra');next.extra.push({name:e.name,min:e.min})}for(let [id,v] of Object.entries(r.tasks)){if(!v||!Number.isInteger(v.min)||v.min<0||v.min>1440)throw Error('bad task');if(version===2){if(!['pending','done','skipped'].includes(v.status))throw Error('bad status');next.tasks[id]={status:v.status,min:v.min,name:typeof v.name==='string'?v.name:''};continue}if(!v.done)continue;let old=oldPlan(s).find(t=>t.id===id),p=plan(s).find(t=>t.id===id),name=v.name||old?.name||'错题复盘';if(p&&old&&p.time===old.time&&hcShare(p.name)===hcShare(name)){next.tasks[id]={status:'done',min:v.min,name}}else{next.extra.push({name,min:v.min})}}result[s]=next}return result}
-let storageProblem=false;try{let raw=JSON.parse(localStorage.getItem(KEY)||'{}')||{};data=raw.version===2?normalize(raw.data,2):normalize(raw,1)}catch(e){storageProblem=true}let selected=clamp(now()),cal=selected.slice(0,7); let pickerCal=selected.slice(0,7);function save(){try{localStorage.setItem(KEY,JSON.stringify({version:SCHEMA,data}));$('notice').textContent='已自动保存到本地'}catch(e){$('notice').textContent='本地保存失败，请立即导出备份'}}function rec(s){return data[s]||(data[s]=empty())}function status(s,t){return data[s]?.tasks?.[t.id]?.status||'pending'}
+let storageProblem=false;try{let raw=JSON.parse(localStorage.getItem(KEY)||'{}')||{};data=raw.version===2?normalize(raw.data,2):normalize(raw,1)}catch(e){storageProblem=true}let selected=clamp(now()),cal=selected.slice(0,7); let pickerCal=selected.slice(0,7);function save(){try{localStorage.setItem(KEY,JSON.stringify({version:SCHEMA,data}));$('notice').textContent='已自动保存到本地';githubSync?.changed()}catch(e){$('notice').textContent='本地保存失败，请立即导出备份'}}function rec(s){return data[s]||(data[s]=empty())}function status(s,t){return data[s]?.tasks?.[t.id]?.status||'pending'}
 function aggregate(ds){
   let a={planned:0,donePlan:0,skipped:0,pending:0,past:0,actual:0,extra:0,hcPlan:0,hcActual:0,hcSkipped:0,hcPending:0,freePlan:0,freeActual:0,freeSkipped:0,freePending:0,video:0,practice:0,review:0,videoPlan:0};
   for(let s of ds){let r=data[s];for(let t of plan(s)){
@@ -300,4 +352,77 @@ function choose(s){selected=clamp(s);cal=selected.slice(0,7);pickerCal=selected.
 $('prev').onclick=()=>choose(add(selected,-1));$('next').onclick=()=>choose(add(selected,1));$('today').onclick=()=>choose(now());$('dateBtn').onclick=()=>togglePicker();$('pickerClose').onclick=()=>closePicker();$('pickerToday').onclick=()=>{pickerCal=now().slice(0,7);choose(now());closePicker()};$('pickerPrevMonth').onclick=()=>{let d=parse(pickerCal+'-01');d.setMonth(d.getMonth()-1);let m=fmt(d).slice(0,7);if(m>=START.slice(0,7)&&m<=END.slice(0,7)){pickerCal=m;renderPicker()}};$('pickerNextMonth').onclick=()=>{let d=parse(pickerCal+'-01');d.setMonth(d.getMonth()+1);let m=fmt(d).slice(0,7);if(m>=START.slice(0,7)&&m<=END.slice(0,7)){pickerCal=m;renderPicker()}};document.addEventListener('click',e=>{let box=$('datePanel'),wrap=e.target.closest('.datepick');if(box&&!box.classList.contains('hidden')&&!wrap)closePicker()});$('note').oninput=e=>{rec(selected).note=e.target.value;save()};$('all').onclick=()=>{let r=rec(selected);for(let t of plan(selected))if(status(selected,t)==='pending')r.tasks[t.id]={status:'done',name:t.name,min:t.min};save();render()};$('skipAll').onclick=()=>{if(!confirm('跳过当天全部待办？已完成的任务不会被修改。'))return;let r=rec(selected);for(let t of plan(selected))if(status(selected,t)==='pending')r.tasks[t.id]={status:'skipped',name:t.name,min:t.min};save();render()};$('clear').onclick=()=>{if(confirm('清除当天所有打卡、跳过和额外学习？笔记保留。')){let r=rec(selected);r.tasks={};r.extra=[];save();render()}};$('extraAdd').onclick=()=>{let n=Number($('extraMin').value);if(!Number.isInteger(n)||n<=0||n>1440)return alert('请输入1至1440分钟');rec(selected).extra.push({name:$('extraType').value,min:n});save();render()};function moveMonth(n){let d=parse(cal+'-01');d.setMonth(d.getMonth()+n);let m=fmt(d).slice(0,7);if(m>=START.slice(0,7)&&m<=END.slice(0,7)){cal=m;calendar()}}$('mp').onclick=()=>moveMonth(-1);$('mn').onclick=()=>moveMonth(1);$('export').onclick=()=>{let url=URL.createObjectURL(new Blob([JSON.stringify({version:SCHEMA,data},null,2)],{type:'application/json'})),a=el('a');a.href=url;a.download='学习打卡备份-'+now()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};$('import').onclick=()=>$('file').click();$('file').onchange=async e=>{try{let obj=JSON.parse(await e.target.files[0].text());if(![1,2].includes(obj.version)||!obj.data||typeof obj.data!=='object'||Array.isArray(obj.data))throw Error();let next=normalize(obj.data,obj.version);if(confirm('导入将覆盖当前全部打卡数据，继续？')){data=next;save();render()}}catch(err){alert('备份格式无效，未修改数据')}e.target.value=''};render();if(storageProblem)$('notice').textContent='旧记录读取失败；如有备份，请先导入恢复。';
 
 function initExtraPicker(){const select=$('extraType'),choice=$('extraChoice'),menu=$('extraMenu');const kinds=['kind-hc','kind-pro','kind-mix'];function sync(){let opt=select.selectedOptions[0],group=opt.parentElement;choice.classList.remove(...kinds);choice.classList.add(kinds[Array.from(select.children).indexOf(group)]);$('extraChoiceLabel').textContent=opt.textContent;for(let b of menu.querySelectorAll('button')){let current=b.dataset.value===select.value;b.classList.toggle('is-selected',current);b.setAttribute('aria-pressed',String(current));b.querySelector('.option-check').textContent=current?'✓':''}}function close(focus=false){menu.hidden=true;choice.setAttribute('aria-expanded','false');if(focus)choice.focus()}function open(){menu.hidden=false;choice.setAttribute('aria-expanded','true');menu.querySelector('.is-selected')?.focus()}for(let [i,group] of Array.from(select.children).entries()){let wrap=el('div','extra-group '+kinds[i]);wrap.append(el('div','extra-group-title',group.label));for(let opt of group.children){let b=el('button','extra-option');b.type='button';b.dataset.value=opt.value;b.append(el('span','',opt.textContent),el('span','option-check',''));b.onclick=()=>{select.value=opt.value;sync();close(true)};wrap.append(b)}menu.append(wrap)}sync();choice.onclick=()=>menu.hidden?open():close();choice.onkeydown=e=>{if(e.key==='ArrowDown'){e.preventDefault();open()}};menu.onkeydown=e=>{let buttons=Array.from(menu.querySelectorAll('button')),i=buttons.indexOf(document.activeElement);if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();buttons[(i+(e.key==='ArrowDown'?1:buttons.length-1))%buttons.length].focus()}else if(e.key==='Escape'){e.preventDefault();close(true)}};document.addEventListener('click',e=>{if(!$('extraPicker').contains(e.target))close()});document.addEventListener('focusin',e=>{if(!menu.hidden&&!$('extraPicker').contains(e.target))close()});}initExtraPicker();
+function initGitHubSync(){
+  const statusEl=$('syncStatus'),settings=$('syncSettings'),nowButton=$('syncNow'),dialog=$('syncDialog'),conflictDialog=$('syncConflictDialog');
+  settings.onclick=()=>{if(githubSync?.config){$('syncRepo').value=githubSync.config.owner+'/'+githubSync.config.repo}$('syncToken').value='';$('syncFeedback').textContent='';$('syncDisconnect').hidden=!githubSync?.config;dialog.showModal()};
+  $('syncClose').onclick=()=>dialog.close();$('syncConflictClose').onclick=()=>conflictDialog.close();
+  if(!globalThis.StudyGitHubSync){statusEl.textContent='同步模块未加载，请刷新页面；本地打卡仍可用';return}
+  function describe(value){
+    if(value===null)return '待完成（未打卡）';
+    if(typeof value==='string')return value||'空白笔记';
+    if(Array.isArray(value))return value.length?value.map(v=>display(v.name)+' · '+v.min+'min').join('\n'):'无额外学习';
+    return (value.status==='done'?'已完成':value.status==='skipped'?'已跳过':'待完成')+' · '+value.min+'min';
+  }
+  function showConflicts(){
+    if(!githubSync.conflict)return;
+    const root=$('syncConflictItems');root.replaceChildren();
+    githubSync.conflict.items.forEach((item,index)=>{
+      const box=el('fieldset','sync-conflict'),label=item.field==='note'?'今日笔记':item.field==='extra'?'额外学习':(plan(item.date).find(t=>'tasks/'+t.id===item.field)?.time||'任务');
+      box.append(el('legend','',item.date+' · '+label));
+      for(const[choice,title,value]of [['local','保留此设备',item.local],['remote','保留GitHub',item.remote]]){
+        const row=el('label'),radio=el('input'),text=el('span');radio.type='radio';radio.name='conflict-'+index;radio.value=choice;radio.required=true;
+        text.append(document.createTextNode(title),el('pre','',describe(value)));row.append(radio,text);box.append(row);
+      }
+      root.append(box);
+    });
+    $('syncConflictFeedback').textContent='';if(!conflictDialog.open)conflictDialog.showModal();
+  }
+  githubSync=new StudyGitHubSync.GitHubSync({
+    key:KEY,storage:localStorage,getData:()=>data,normalize:raw=>normalize(raw,2),
+    canSync:()=>!storageProblem&&document.visibilityState!=='hidden'&&!document.activeElement?.matches('#dailySection input,#dailySection textarea'),
+    isOnline:()=>navigator.onLine,
+    applyData:incoming=>{
+      const next=normalize(incoming,2),snapshot=JSON.stringify({version:SCHEMA,data:next});
+      if(!localStorage.getItem(KEY+'-before-github-sync'))localStorage.setItem(KEY+'-before-github-sync',localStorage.getItem(KEY)||JSON.stringify({version:SCHEMA,data}));
+      localStorage.setItem(KEY,snapshot);data=next;render();$('notice').textContent='已合并并保存到本地';
+    },
+    onState:state=>{
+      statusEl.dataset.kind=state.kind;statusEl.textContent=state.kind==='synced'?'已同步 · '+new Date(state.time).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}):state.message;
+      nowButton.hidden=!state.configured;nowButton.disabled=state.kind==='syncing';nowButton.textContent=state.kind==='conflict'?'处理差异':'立即同步';settings.textContent=state.configured?'同步设置':'连接同步';
+      $('syncDisconnect').hidden=!state.configured;
+    }
+  });
+  nowButton.onclick=()=>githubSync.conflict?showConflicts():githubSync.sync();
+  $('syncRepo').oninput=()=>{
+    const owner=$('syncRepo').value.trim().split('/')[0];if(/^[a-zA-Z0-9-]+$/.test(owner))$('syncTokenLink').href='https://github.com/settings/personal-access-tokens/new?name=kb-study-sync&target_name='+encodeURIComponent(owner)+'&expires_in=180&contents=write';
+  };
+  $('syncForm').onsubmit=async e=>{
+    e.preventDefault();if(storageProblem){$('syncFeedback').textContent='请先从备份恢复本地记录，再刷新页面连接同步。';return}
+    const parts=$('syncRepo').value.trim().split('/'),token=$('syncToken').value.trim()||githubSync.config?.token;
+    if(parts.length!==2||!token){$('syncFeedback').textContent='请填写“用户名/仓库名”和访问令牌。';return}
+    const submit=$('syncConnect');submit.disabled=true;submit.textContent='正在连接';$('syncFeedback').textContent='';
+    try{
+      const okay=await githubSync.connect({owner:parts[0],repo:parts[1],token});$('syncToken').value='';
+      if(okay){dialog.close()}else if(githubSync.conflict){dialog.close();showConflicts()}else{$('syncFeedback').textContent=githubSync.state.message}
+    }catch(error){$('syncFeedback').textContent=error.message}
+    finally{submit.disabled=false;submit.textContent='保存并同步'}
+  };
+  $('syncDisconnect').onclick=()=>{
+    if(!confirm('断开此设备的同步？本地记录和GitHub记录都会保留。'))return;
+    try{githubSync.disconnect();$('syncToken').value='';$('syncFeedback').textContent='已断开，本地记录保留。'}catch(error){$('syncFeedback').textContent=error.message}
+  };
+  $('syncConflictExport').onclick=()=>$('export').click();
+  $('syncConflictForm').onsubmit=async e=>{
+    e.preventDefault();const form=new FormData(e.target),choices={};githubSync.conflict?.items.forEach((item,i)=>{choices[item.key]=form.get('conflict-'+i)});
+    $('syncConflictResolve').disabled=true;
+    try{const okay=await githubSync.resolve(choices);if(okay){conflictDialog.close()}else if(githubSync.conflict){showConflicts()}else{$('syncConflictFeedback').textContent=githubSync.state.message}}
+    catch(error){$('syncConflictFeedback').textContent=error.message}
+    finally{$('syncConflictResolve').disabled=false}
+  };
+  addEventListener('online',()=>githubSync.sync());addEventListener('focus',()=>githubSync.sync());
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)githubSync.sync()});
+  $('dailySection').addEventListener('focusout',()=>setTimeout(()=>{if(githubSync.config)githubSync.sync()},0));
+  if(storageProblem){statusEl.textContent='本地记录读取失败，请先导入备份后再连接同步'}else{githubSync.start()}
+}
+initGitHubSync();
 </script></body></html>

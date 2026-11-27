@@ -21,12 +21,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Verify synchronization
+        run: node --test tests/github-sync.test.cjs
+
       - name: Prepare public files
         shell: bash
         run: |
           mkdir -p _site
           cp learning_tracker.html _site/index.html
           cp learning_tracker.html _site/learning_tracker.html
+          cp github-sync.js _site/github-sync.js
           touch _site/.nojekyll
 
       - name: Setup Pages
